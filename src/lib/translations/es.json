@@ -1,0 +1,74 @@
+{
+  "common": {
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "welcome": "Bienvenido",
+    "appName": "Pokémon BattleBrawl",
+    "signIn": "Iniciar sesión",
+    "signingIn": "Iniciando sesión...",
+    "username": "Usuario",
+    "password": "Contraseña",
+    "email": "Email",
+    "confirmPassword": "Confirmar Contraseña",
+    "rememberMe": "Recordarme",
+    "play": "Jugar",
+    "battle": "Batalla",
+    "trainer": "Entrenador",
+    "pokemon": "Pokémon",
+    "createAccount": "Crear Cuenta",
+    "creatingAccount": "Creando cuenta...",
+    "sendInstructions": "Enviar Instrucciones",
+    "sending": "Enviando...",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "dontHaveAccount": "¿No tienes una cuenta?",
+    "createOneHere": "Crea una aquí",
+    "rememberPassword": "¿Recuerdas tu contraseña?",
+    "backToLogin": "Volver al login"
+  },
+  "login": {
+    "userOrEmail": "Usuario o Email",
+    "signInToAccount": "Inicia sesión para comenzar tu aventura Pokémon",
+    "authenticationSuccessful": "¡Bienvenido a Pokémon BattleBrawl!",
+    "sessionActive": "Tu sesión de entrenador está activa y lista para la batalla."
+  },
+  "register": {
+    "createAccount": "Crea tu cuenta de entrenador",
+    "joinAdventure": "Únete a la aventura de Pokémon BattleBrawl",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "signInHere": "Inicia sesión",
+    "registrationSuccessful": "¡Bienvenido al mundo Pokémon!",
+    "accountCreated": "Tu cuenta de entrenador ha sido creada exitosamente."
+  },
+  "forgotPassword": {
+    "resetPassword": "Restablecer tu contraseña",
+    "enterEmail": "Ingresa tu email para recibir instrucciones de restablecimiento",
+    "backToLogin": "Volver al login",
+    "emailSent": "¡Instrucciones enviadas!",
+    "checkEmail": "Revisa tu email para las instrucciones de restablecimiento de contraseña."
+  },
+  "resetPassword": {
+    "resetYourPassword": "Restablecer tu contraseña",
+    "enterNewPassword": "Ingresa tu nueva contraseña",
+    "passwordReset": "Restablecimiento de contraseña",
+    "passwordUpdated": "¡Contraseña actualizada exitosamente!",
+    "passwordUpdatedMessage": "Tu contraseña ha sido actualizada. Ahora puedes iniciar sesión con tu nueva contraseña.",
+    "invalidToken": "Token inválido o expirado",
+    "invalidTokenMessage": "Este enlace de restablecimiento es inválido o ha expirado. Por favor solicita uno nuevo.",
+    "requestNewLink": "Solicitar nuevo enlace",
+    "newPassword": "Nueva Contraseña",
+    "confirmNewPassword": "Confirmar Nueva Contraseña",
+    "updatePassword": "Actualizar Contraseña",
+    "updatingPassword": "Actualizando contraseña..."
+  },
+  "main": {
+    "welcomeToApp": "Bienvenido a Pokémon BattleBrawl",
+    "loggedInAs": "Entrenador:",
+    "readyToBattle": "¿Listo para tu próxima batalla?",
+    "catchEmAll": "¡Hay que atraparlos a todos!"
+  },
+  "theme": {
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Sistema"
+  }
+}

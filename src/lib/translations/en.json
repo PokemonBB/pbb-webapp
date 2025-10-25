@@ -1,0 +1,74 @@
+{
+  "common": {
+    "login": "Login",
+    "logout": "Logout",
+    "welcome": "Welcome",
+    "appName": "Pokémon BattleBrawl",
+    "signIn": "Sign in",
+    "signingIn": "Signing in...",
+    "username": "Username",
+    "password": "Password",
+    "email": "Email",
+    "confirmPassword": "Confirm Password",
+    "rememberMe": "Remember me",
+    "play": "Play",
+    "battle": "Battle",
+    "trainer": "Trainer",
+    "pokemon": "Pokémon",
+    "createAccount": "Create Account",
+    "creatingAccount": "Creating account...",
+    "sendInstructions": "Send Reset Instructions",
+    "sending": "Sending...",
+    "forgotPassword": "Forgot password?",
+    "dontHaveAccount": "Don't have an account?",
+    "createOneHere": "Create one here",
+    "rememberPassword": "Remember your password?",
+    "backToLogin": "Back to login"
+  },
+  "login": {
+    "userOrEmail": "User or Email",
+    "signInToAccount": "Sign in to start your Pokémon journey",
+    "authenticationSuccessful": "Welcome to Pokémon BattleBrawl!",
+    "sessionActive": "Your trainer session is active and ready for battle."
+  },
+  "register": {
+    "createAccount": "Create your trainer account",
+    "joinAdventure": "Join the Pokémon BattleBrawl adventure",
+    "alreadyHaveAccount": "Already have an account?",
+    "signInHere": "Sign in",
+    "registrationSuccessful": "Welcome to the Pokémon world!",
+    "accountCreated": "Your trainer account has been created successfully."
+  },
+  "forgotPassword": {
+    "resetPassword": "Reset your password",
+    "enterEmail": "Enter your email to receive reset instructions",
+    "backToLogin": "Back to login",
+    "emailSent": "Reset instructions sent!",
+    "checkEmail": "Check your email for password reset instructions."
+  },
+  "resetPassword": {
+    "resetYourPassword": "Reset your password",
+    "enterNewPassword": "Enter your new password",
+    "passwordReset": "Password reset",
+    "passwordUpdated": "Password updated successfully!",
+    "passwordUpdatedMessage": "Your password has been updated. You can now sign in with your new password.",
+    "invalidToken": "Invalid or expired token",
+    "invalidTokenMessage": "This password reset link is invalid or has expired. Please request a new one.",
+    "requestNewLink": "Request new reset link",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "updatePassword": "Update Password",
+    "updatingPassword": "Updating password..."
+  },
+  "main": {
+    "welcomeToApp": "Welcome to Pokémon BattleBrawl",
+    "loggedInAs": "Trainer:",
+    "readyToBattle": "Ready for your next battle?",
+    "catchEmAll": "Gotta catch 'em all!"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  }
+}

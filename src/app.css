@@ -1,0 +1,46 @@
+@import './lib/fonts.css';
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+
+@variant dark (.dark &);
+
+:root {
+	/* Light theme colors */
+	--bg-primary: #f9fafb;
+	--bg-secondary: #ffffff;
+	--bg-tertiary: #f3f4f6;
+	--text-primary: #111827;
+	--text-secondary: #6b7280;
+	--text-tertiary: #9ca3af;
+	--border-primary: #e5e7eb;
+	--border-secondary: #d1d5db;
+	--accent-primary: #4f46e5;
+	--accent-hover: #4338ca;
+	--success-bg: #f0fdf4;
+	--success-text: #166534;
+	--success-border: #bbf7d0;
+	--error-bg: #fef2f2;
+	--error-text: #dc2626;
+	--error-border: #fecaca;
+}
+
+.dark {
+	/* Dark theme colors */
+	--bg-primary: #111827;
+	--bg-secondary: #1f2937;
+	--bg-tertiary: #374151;
+	--text-primary: #f9fafb;
+	--text-secondary: #d1d5db;
+	--text-tertiary: #9ca3af;
+	--border-primary: #374151;
+	--border-secondary: #4b5563;
+	--accent-primary: #6366f1;
+	--accent-hover: #5b21b6;
+	--success-bg: #064e3b;
+	--success-text: #10b981;
+	--success-border: #065f46;
+	--error-bg: #7f1d1d;
+	--error-text: #f87171;
+	--error-border: #991b1b;
+}
