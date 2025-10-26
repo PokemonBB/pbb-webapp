@@ -6,6 +6,7 @@
 	import { userConfigStore } from '$lib/stores/userConfig';
 	import { translationStore } from '$lib/stores/translations';
 	import { authApi } from '$lib/utils/api';
+	import Credits from '$lib/components/common/Credits.svelte';
 
 	let password = '';
 	let confirmPassword = '';
@@ -274,3 +275,5 @@
 		{/if}
 	</div>
 </div>
+
+<Credits />

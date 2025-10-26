@@ -118,8 +118,6 @@ function createAuthStore() {
 
 			try {
 				const response = await authApi.verify();
-				console.log('Auth verification response:', response);
-
 				// Check for successful authentication (either "Login successful" or "Authentication verified")
 				if (
 					(response.message === 'Login successful' ||

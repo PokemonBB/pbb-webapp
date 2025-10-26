@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { authStore } from '$lib/stores/auth';
 	import { userConfigStore } from '$lib/stores/userConfig';
 	import { translationStore } from '$lib/stores/translations';
 	import { onMount } from 'svelte';

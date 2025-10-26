@@ -5,6 +5,7 @@
 	import pbbLogo from '$lib/assets/pbb-logo.png';
 	import { userConfigStore } from '$lib/stores/userConfig';
 	import { translationStore } from '$lib/stores/translations';
+	import Credits from '$lib/components/common/Credits.svelte';
 
 	let username = '';
 	let email = '';
@@ -85,7 +86,7 @@
 						required
 						class="relative block w-full appearance-none rounded-none rounded-t-md border px-3 py-3 focus:z-10 focus:outline-none sm:text-sm"
 						style="border-color: var(--border-primary); background-color: var(--bg-secondary); color: var(--text-primary); --tw-placeholder-color: var(--text-tertiary);"
-						placeholder={$translationStore.translations?.common.trainer || 'Trainer Name'}
+						placeholder={$translationStore.translations?.common.username || 'Username'}
 						bind:value={username}
 						on:keydown={handleKeydown}
 						disabled={isLoading}
@@ -211,3 +212,5 @@
 		</form>
 	</div>
 </div>
+
+<Credits />

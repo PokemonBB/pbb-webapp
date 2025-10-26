@@ -2,8 +2,6 @@
   "common": {
     "login": "Iniciar sesión",
     "logout": "Cerrar sesión",
-    "welcome": "Bienvenido",
-    "appName": "Pokémon BattleBrawl",
     "signIn": "Iniciar sesión",
     "signingIn": "Iniciando sesión...",
     "username": "Usuario",

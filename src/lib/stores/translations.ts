@@ -5,8 +5,6 @@ interface Translations {
 	common: {
 		login: string;
 		logout: string;
-		welcome: string;
-		appName: string;
 		signIn: string;
 		signingIn: string;
 		username: string;
@@ -95,16 +93,13 @@ function createTranslationStore() {
 
 	const loadTranslations = async (language: Language): Promise<Translations> => {
 		try {
-			const response = await fetch(`/src/lib/translations/${language}.json`);
-			if (!response.ok) {
-				throw new Error(`Failed to load translations for ${language}`);
-			}
-			return await response.json();
+			const module = await import(`../translations/${language}.json`);
+			return module.default as Translations;
 		} catch (error) {
 			console.error(`Error loading translations for ${language}:`, error);
-			// Fallback to English if the requested language fails
 			if (language !== 'en') {
-				return await loadTranslations('en');
+				const module = await import(`../translations/en.json`);
+				return module.default as Translations;
 			}
 			throw error;
 		}

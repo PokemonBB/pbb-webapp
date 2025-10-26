@@ -5,6 +5,7 @@
 	import pbbLogo from '$lib/assets/pbb-logo.png';
 	import { userConfigStore } from '$lib/stores/userConfig';
 	import { translationStore } from '$lib/stores/translations';
+	import Credits from '$lib/components/common/Credits.svelte';
 
 	let username = '';
 	let password = '';
@@ -192,3 +193,5 @@
 		</form>
 	</div>
 </div>
+
+<Credits />

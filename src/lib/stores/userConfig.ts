@@ -66,7 +66,6 @@ function createUserConfigStore() {
 
 			// Prevent multiple simultaneous initializations
 			if (currentState.isLoading) {
-				console.log('Already loading user configuration, skipping...');
 				return;
 			}
 
@@ -223,7 +222,6 @@ function createUserConfigStore() {
 				applyTheme(config.theme as Theme);
 			} catch {
 				// If user has no configuration, initialize with browser settings
-				console.log('User has no configuration, initializing with browser settings');
 
 				const browserLanguage = getBrowserLanguage();
 				const browserTheme = getBrowserTheme();
@@ -236,7 +234,6 @@ function createUserConfigStore() {
 
 				try {
 					await userApi.updateConfiguration(initialConfig);
-					console.log('User configuration initialized with browser settings');
 				} catch (apiError) {
 					console.warn('Failed to initialize user configuration:', apiError);
 				}
