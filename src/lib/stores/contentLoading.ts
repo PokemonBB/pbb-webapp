@@ -82,7 +82,6 @@ function createContentLoadingStore() {
 					let blob: Blob | null = await cacheStore.getFile(file.path);
 					if (blob) {
 						contentCache[file.path] = blob;
-						console.log(`Cache hit: ${file.path}`);
 					} else {
 						let retryCount = 0;
 						while (retryCount < maxRetries && !blob) {
@@ -90,7 +89,6 @@ function createContentLoadingStore() {
 								blob = await cdsApi.getFile(file.path);
 								await cacheStore.setFile(file.path, blob);
 								contentCache[file.path] = blob;
-								console.log(`Downloaded and cached: ${file.path}`);
 							} catch (error) {
 								retryCount++;
 								console.warn(

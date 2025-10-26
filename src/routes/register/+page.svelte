@@ -20,12 +20,25 @@
 
 	$: authState = $authStore;
 
+	$: {
+		const successParam = $page.url.searchParams.get('success');
+		if (successParam === '1') {
+			registrationSuccess = true;
+		}
+	}
+
 	onMount(() => {
 		if ($authStore.isAuthenticated) {
 			goto('/');
 		}
 		userConfigStore.init();
-		translationStore.init();
+
+		// Persisted success via query or session
+		const regFlag =
+			typeof window !== 'undefined' ? sessionStorage.getItem('registrationSuccess') : null;
+		if (regFlag === '1') {
+			registrationSuccess = true;
+		}
 
 		// Get invitation code from URL
 		const urlCode = $page.url.searchParams.get('code');
@@ -54,7 +67,11 @@
 			});
 
 			if (result.success) {
+				if (typeof window !== 'undefined') {
+					sessionStorage.setItem('registrationSuccess', '1');
+				}
 				registrationSuccess = true;
+				goto('/register?success=1', { replaceState: true });
 			}
 		} catch (err) {
 			error = 'Registration failed. Please try again.';
@@ -124,6 +141,9 @@
 						on:click={() => {
 							registrationSuccess = false;
 							error = '';
+							if (typeof window !== 'undefined') {
+								sessionStorage.removeItem('registrationSuccess');
+							}
 						}}
 						class="w-full rounded-md border px-4 py-2 text-sm font-medium focus:ring-2 focus:ring-offset-2 focus:outline-none"
 						style="border-color: var(--border-primary); color: var(--text-primary);"

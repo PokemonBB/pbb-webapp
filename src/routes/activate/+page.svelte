@@ -14,12 +14,12 @@
 	let error = '';
 	let success = false;
 	let message = '';
+	let hasAttempted = false;
 
 	onMount(() => {
 		userConfigStore.init();
 		translationStore.init();
 
-		// Get activation code from URL
 		const urlCode = $page.url.searchParams.get('code');
 		if (urlCode) {
 			activationCode = urlCode;
@@ -32,28 +32,58 @@
 			error = 'No activation code provided';
 			return;
 		}
+		if (isActivating || success || hasAttempted) return;
+		hasAttempted = true;
 
 		isActivating = true;
 		error = '';
 		success = false;
 
 		try {
-			const response = await activationApi.activate({ code: activationCode });
+			const sanitizedCode = activationCode.trim();
+			const response = await activationApi.activate({ code: sanitizedCode });
 
 			if (response.success) {
 				success = true;
 				message = response.message || 'Account activated successfully! You can now register.';
-
-				// Redirect to register with the invitation code if provided
-				const invitationCode = response.invitationCode || activationCode;
+				const invitationCode = response.invitationCode || sanitizedCode;
 				setTimeout(() => {
 					goto(`/login`);
-				}, 3000);
+				}, 2000);
 			} else {
 				error = response.message || 'Activation failed. Please check your code and try again.';
 			}
 		} catch (err) {
-			error = 'Activation failed. Please check your code and try again.';
+			const apiErr = err as unknown as { message?: string; status?: number };
+			const rawMsg = (apiErr?.message || '').toString();
+			const msg = rawMsg.toLowerCase();
+			const idempotentPatterns = [
+				'already activated',
+				'already-activated',
+				'already active',
+				'code already used',
+				'already used',
+				'ya activada',
+				'ya activado',
+				'ya esta activada',
+				'ya está activada',
+				'codigo ya usado',
+				'código ya usado'
+			];
+			if (
+				apiErr?.status === 409 ||
+				apiErr?.status === 400 ||
+				idempotentPatterns.some((p) => msg.includes(p))
+			) {
+				success = true;
+				message = rawMsg || 'Account already activated. You can now register.';
+				setTimeout(() => {
+					goto('/login');
+				}, 2000);
+			} else {
+				error = 'Activation failed. Please check your code and try again.';
+				hasAttempted = false;
+			}
 		}
 
 		isActivating = false;
