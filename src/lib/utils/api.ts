@@ -13,6 +13,7 @@ interface RegisterRequest {
 	username: string;
 	email: string;
 	password: string;
+	invitationCode: string;
 }
 
 interface ForgotPasswordRequest {
@@ -54,6 +55,7 @@ interface UpdateUserRequest {
 	email?: string;
 	role?: 'ROOT' | 'ADMIN' | 'USER';
 	active?: boolean;
+	canInvite?: boolean;
 }
 
 interface UpdateUserResponse {
@@ -146,6 +148,39 @@ interface SearchUsersParams {
 interface GetUsersParams {
 	page?: number;
 	limit?: number;
+}
+
+interface CreateInvitationRequest {
+	expiresInDays?: number;
+}
+
+interface CreateInvitationResponse {
+	message: string;
+	invitation: {
+		id: string;
+		code: string;
+		expiresAt: string;
+		createdAt: string;
+	};
+}
+
+interface ActivateAccountRequest {
+	code: string;
+}
+
+interface ActivateAccountResponse {
+	message: string;
+	success: boolean;
+	invitationCode?: string;
+}
+
+interface ResendActivationRequest {
+	email: string;
+}
+
+interface ResendActivationResponse {
+	message: string;
+	success: boolean;
 }
 
 interface ApiError {
@@ -369,6 +404,39 @@ class ApiClient {
 			}
 		});
 	}
+
+	async createInvitation(data?: CreateInvitationRequest): Promise<CreateInvitationResponse> {
+		return this.makeRequest<CreateInvitationResponse>('/invitations', {
+			method: 'POST',
+			body: data ? JSON.stringify(data) : JSON.stringify({ expiresInDays: 7 }),
+			headers: {
+				'Content-Type': 'application/json',
+				Accept: 'application/json'
+			}
+		});
+	}
+
+	async activateAccount(data: ActivateAccountRequest): Promise<ActivateAccountResponse> {
+		return this.makeRequest<ActivateAccountResponse>('/activation/activate', {
+			method: 'POST',
+			body: JSON.stringify(data),
+			headers: {
+				'Content-Type': 'application/json',
+				Accept: 'application/json'
+			}
+		});
+	}
+
+	async resendActivation(data: ResendActivationRequest): Promise<ResendActivationResponse> {
+		return this.makeRequest<ResendActivationResponse>('/activation/resend', {
+			method: 'POST',
+			body: JSON.stringify(data),
+			headers: {
+				'Content-Type': 'application/json',
+				Accept: 'application/json'
+			}
+		});
+	}
 }
 
 export const apiClient = new ApiClient(API_BASE_URL);
@@ -401,6 +469,15 @@ export const auditApi = {
 	getAuditLogs: (params?: GetAuditLogsParams) => apiClient.getAuditLogs(params)
 };
 
+export const invitationApi = {
+	create: (data?: CreateInvitationRequest) => apiClient.createInvitation(data)
+};
+
+export const activationApi = {
+	activate: (data: ActivateAccountRequest) => apiClient.activateAccount(data),
+	resend: (data: ResendActivationRequest) => apiClient.resendActivation(data)
+};
+
 export type {
 	LoginRequest,
 	RegisterRequest,
@@ -422,5 +499,11 @@ export type {
 	User,
 	UsersResponse,
 	SearchUsersParams,
-	GetUsersParams
+	GetUsersParams,
+	CreateInvitationRequest,
+	CreateInvitationResponse,
+	ActivateAccountRequest,
+	ActivateAccountResponse,
+	ResendActivationRequest,
+	ResendActivationResponse
 };

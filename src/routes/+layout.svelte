@@ -14,8 +14,7 @@
 	let { children } = $props();
 
 	onMount(() => {
-		// Initialize browser configuration first (before login)
-		userConfigStore.init();
+		// Initialize translations first
 		translationStore.init();
 
 		// Then check authentication
@@ -25,7 +24,14 @@
 	$effect(() => {
 		if (typeof window !== 'undefined') {
 			const currentPath = $page.url.pathname;
-			const authPages = ['/login', '/register', '/forgot-password', '/reset-password'];
+			const authPages = [
+				'/login',
+				'/register',
+				'/forgot-password',
+				'/reset-password',
+				'/activate',
+				'/activate/resend'
+			];
 			const isOnAuthPage = authPages.some((page) => currentPath.includes(page));
 			const isOnContentLoading = currentPath === '/content-loading';
 
@@ -35,6 +41,9 @@
 					goto('/login');
 				}
 			} else if ($authStore.isAuthenticated === true && $authStore.isLoading === false) {
+				// Initialize user configuration only when authenticated
+				userConfigStore.init();
+
 				// Authenticated: check content loading status
 				if (!$contentLoadingStore.isComplete) {
 					// Content not loaded: go to content loading
@@ -70,7 +79,9 @@
 		'/login',
 		'/register',
 		'/forgot-password',
-		'/reset-password'
+		'/reset-password',
+		'/activate',
+		'/activate/resend'
 	]}
 	{@const shouldHideHeader = noHeaderPaths.some((path) => currentPath.startsWith(path))}
 

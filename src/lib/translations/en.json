@@ -21,7 +21,11 @@
     "dontHaveAccount": "Don't have an account?",
     "createOneHere": "Create one here",
     "rememberPassword": "Remember your password?",
-    "backToLogin": "Back to login"
+    "backToLogin": "Back to login",
+    "invitationCode": "Invitation Code",
+    "enterInvitationCode": "Enter your invitation code",
+    "invalidInvitationCode": "Invalid or expired invitation code",
+    "invalidInvitationCodeMessage": "The invitation code you entered is invalid or has expired. Please contact the person who invited you for a new code."
   },
   "login": {
     "userOrEmail": "User or Email",
@@ -35,7 +39,10 @@
     "alreadyHaveAccount": "Already have an account?",
     "signInHere": "Sign in",
     "registrationSuccessful": "Welcome to the Pokémon world!",
-    "accountCreated": "Your trainer account has been created successfully."
+    "accountCreated": "Your trainer account has been created successfully.",
+    "checkEmail": "Check your email to activate your account",
+    "activationEmailSent": "We've sent you an activation email. Please check your inbox and click the activation link to complete your registration.",
+    "backToLogin": "Back to login"
   },
   "forgotPassword": {
     "resetPassword": "Reset your password",
@@ -68,5 +75,25 @@
     "light": "Light",
     "dark": "Dark",
     "system": "System"
+  },
+  "activate": {
+    "activateAccount": "Activate Your Account",
+    "enterCode": "Enter your activation code to continue",
+    "activationCode": "Activation Code",
+    "enterActivationCode": "Enter your activation code",
+    "activating": "Activating...",
+    "activateAccountButton": "Activate Account",
+    "accountActivated": "Account Activated!",
+    "activationSuccess": "Account activated successfully! You can now register.",
+    "redirecting": "Redirecting to registration...",
+    "noCode": "Don't have an activation code?",
+    "contactSupport": "Contact support",
+    "resendCode": "Resend Activation Code",
+    "enterEmail": "Enter your email to receive a new activation code",
+    "codeSent": "Code Sent!",
+    "resendAnother": "Resend Another",
+    "sending": "Sending...",
+    "alreadyHaveCode": "Already have an activation code?",
+    "activateHere": "Activate here"
   }
 }

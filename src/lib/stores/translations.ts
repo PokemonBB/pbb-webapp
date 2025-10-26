@@ -25,6 +25,10 @@ interface Translations {
 		createOneHere: string;
 		rememberPassword: string;
 		backToLogin: string;
+		invitationCode: string;
+		enterInvitationCode: string;
+		invalidInvitationCode: string;
+		invalidInvitationCodeMessage: string;
 	};
 	login: {
 		userOrEmail: string;
@@ -39,6 +43,9 @@ interface Translations {
 		signInHere: string;
 		registrationSuccessful: string;
 		accountCreated: string;
+		checkEmail: string;
+		activationEmailSent: string;
+		backToLogin: string;
 	};
 	forgotPassword: {
 		resetPassword: string;
@@ -71,6 +78,26 @@ interface Translations {
 		light: string;
 		dark: string;
 		system: string;
+	};
+	activate: {
+		activateAccount: string;
+		enterCode: string;
+		activationCode: string;
+		enterActivationCode: string;
+		activating: string;
+		activateAccountButton: string;
+		accountActivated: string;
+		activationSuccess: string;
+		redirecting: string;
+		noCode: string;
+		contactSupport: string;
+		resendCode: string;
+		enterEmail: string;
+		codeSent: string;
+		resendAnother: string;
+		sending: string;
+		alreadyHaveCode: string;
+		activateHere: string;
 	};
 }
 
