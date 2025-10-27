@@ -23,6 +23,8 @@ const defaultConfig: UserConfigState = {
 function createUserConfigStore() {
 	const { subscribe, update } = writable<UserConfigState>(defaultConfig);
 
+	let hasInitialized = false;
+
 	const applyTheme = (theme: Theme) => {
 		if (!browser) return;
 
@@ -49,13 +51,16 @@ function createUserConfigStore() {
 
 	const getBrowserTheme = (): Theme => {
 		if (!browser) return 'system';
-		return 'system'; // Always use system preference before login
+
+		return 'system';
 	};
 
 	return {
 		subscribe,
 		init: async () => {
-			if (!browser) return;
+			if (!browser || hasInitialized) return;
+
+			hasInitialized = true;
 
 			// Get current state without subscribing
 			let currentState: UserConfigState = defaultConfig;

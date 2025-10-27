@@ -82,7 +82,7 @@
 					<div class="h-2 w-full rounded-full bg-gray-200">
 						<div
 							class="h-2 rounded-full transition-all duration-300 ease-out"
-							style="background-color: #FF0000; width: {progress}%"
+							style="background-color: var(--game-red); width: {progress}%"
 						></div>
 					</div>
 				</div>

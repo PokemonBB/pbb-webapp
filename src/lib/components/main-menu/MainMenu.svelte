@@ -1,8 +1,9 @@
 <script lang="ts">
 	import pbbLogo from '$lib/assets/pbb-logo.png';
-	import LogoutButton from './LogoutButton.svelte';
-	import ProfileButton from './ProfileButton.svelte';
-	import SettingsButton from './SettingsButton.svelte';
+	import LogoutButton from './buttons/LogoutButton.svelte';
+	import ProfileButton from './buttons/ProfileButton.svelte';
+	import SettingsButton from './buttons/SettingsButton.svelte';
+	import FriendsButton from './buttons/FriendsButton.svelte';
 </script>
 
 <aside
@@ -19,6 +20,7 @@
 
 		<div class="flex-1 space-y-2 p-2">
 			<ProfileButton />
+			<FriendsButton />
 		</div>
 
 		<div class="space-y-2 border-t p-2" style="border-color: var(--border-color);">

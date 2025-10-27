@@ -95,5 +95,53 @@
     "sending": "Sending...",
     "alreadyHaveCode": "Already have an activation code?",
     "activateHere": "Activate here"
+  },
+  "profile": {
+    "title": "Profile",
+    "windowTitle": "User Profile"
+  },
+  "settings": {
+    "title": "Settings",
+    "windowTitle": "Settings",
+    "theme": "Theme",
+    "language": "Language",
+    "languageEnglish": "English",
+    "languageSpanish": "Spanish",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System"
+  },
+  "friends": {
+    "title": "Friends",
+    "windowTitle": "Friends",
+    "tabs": {
+      "friends": "Friends",
+      "sent": "Sent",
+      "received": "Received",
+      "search": "Search"
+    },
+    "actions": {
+      "remove": "Remove",
+      "accept": "Accept",
+      "decline": "Decline",
+      "addFriend": "Add Friend",
+      "search": "Search",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "messages": {
+      "noFriends": "No friends yet",
+      "noSentRequests": "No sent requests",
+      "noReceivedRequests": "No received requests",
+      "noUsersFound": "No users found",
+      "searchPlaceholder": "Search users...",
+      "status": "Status:",
+      "page": "Page"
+    },
+    "status": {
+      "pending": "Pending",
+      "accepted": "Accepted",
+      "declined": "Declined"
+    }
   }
 }

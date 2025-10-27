@@ -32,63 +32,81 @@
 </script>
 
 <div class="pokeball-container">
-	<svg class="pokeball" width={actualSize} height={actualSize} viewBox="0 0 100 100">
-		<defs>
-			<clipPath id="top-clip">
-				<rect x="0" y="0" width="100" height="50" />
-			</clipPath>
-		</defs>
-		<circle class="ball" cx="50" cy="50" r="47" fill="white" stroke="black" stroke-width="2" />
-		<circle class="top-half" cx="50" cy="50" r="46" fill="red" clip-path="url(#top-clip)" />
-		<rect class="middle-line" x="2" y="48" width="95" height="4" fill="black" />
-		<circle
-			class="button-outline"
-			cx="50"
-			cy="50"
-			r="15"
-			fill="white"
-			stroke="white"
-			stroke-width="1"
-		/>
-		<circle class="button" cx="50" cy="50" r="8" fill="white" stroke="white" stroke-width="1" />
-		<circle
-			class="button-outline"
-			cx="50"
-			cy="50"
-			r="15"
-			fill="none"
-			stroke="black"
-			stroke-width="4"
-		/>
-		<circle
-			class="button-outline"
-			cx="50"
-			cy="50"
-			r="8"
-			fill="none"
-			stroke="black"
-			stroke-width="1"
-		/>
+	<svg
+		class="pokeball"
+		width={actualSize}
+		height={actualSize}
+		viewBox="0 0 32 32"
+		shape-rendering="crispEdges"
+	>
+		<rect x="2" y="6" width="2" height="2" fill="#000" />
+		<rect x="4" y="4" width="2" height="2" fill="#000" />
+		<rect x="6" y="3" width="2" height="1" fill="#000" />
+		<rect x="8" y="2" width="16" height="1" fill="#000" />
+		<rect x="24" y="3" width="2" height="1" fill="#000" />
+		<rect x="26" y="4" width="2" height="2" fill="#000" />
+		<rect x="28" y="6" width="2" height="2" fill="#000" />
+		<rect x="29" y="8" width="1" height="16" fill="#000" />
+		<rect x="28" y="24" width="2" height="2" fill="#000" />
+		<rect x="26" y="26" width="2" height="2" fill="#000" />
+		<rect x="24" y="28" width="2" height="1" fill="#000" />
+		<rect x="8" y="29" width="16" height="1" fill="#000" />
+		<rect x="6" y="28" width="2" height="1" fill="#000" />
+		<rect x="4" y="26" width="2" height="2" fill="#000" />
+		<rect x="2" y="24" width="2" height="2" fill="#000" />
+		<rect x="2" y="8" width="1" height="16" fill="#000" />
+
+		<rect x="6" y="4" width="20" height="1" fill="var(--game-red)" />
+		<rect x="8" y="3" width="16" height="1" fill="var(--game-red)" />
+		<rect x="24" y="4" width="2" height="1" fill="var(--game-red)" />
+		<rect x="4" y="6" width="22" height="2" fill="var(--game-red)" />
+		<rect x="26" y="6" width="2" height="2" fill="var(--game-red)" />
+		<rect x="3" y="8" width="1" height="6" fill="var(--game-red)" />
+		<rect x="28" y="8" width="1" height="6" fill="var(--game-red)" />
+		<rect x="6" y="5" width="20" height="1" fill="var(--game-red)" />
+		<rect x="8" y="6" width="16" height="1" fill="var(--game-red)" />
+		<rect x="6" y="7" width="20" height="1" fill="var(--game-red)" />
+		<rect x="4" y="8" width="24" height="6" fill="var(--game-red)" />
+
+		<rect x="3" y="14" width="1" height="1" fill="var(--game-red)" />
+		<rect x="28" y="14" width="1" height="1" fill="var(--game-red)" />
+		<rect x="2" y="14" width="28" height="1" fill="#000" />
+		<rect x="2" y="15" width="28" height="2" fill="#000" />
+
+		<rect x="3" y="17" width="1" height="7" fill="#fff" />
+		<rect x="28" y="17" width="1" height="7" fill="#fff" />
+		<rect x="4" y="17" width="24" height="7" fill="#fff" />
+		<rect x="4" y="24" width="2" height="2" fill="#fff" />
+		<rect x="26" y="24" width="2" height="2" fill="#fff" />
+		<rect x="6" y="24" width="20" height="2" fill="#fff" />
+		<rect x="6" y="26" width="2" height="1" fill="#fff" />
+		<rect x="24" y="26" width="2" height="1" fill="#fff" />
+		<rect x="8" y="26" width="16" height="1" fill="#fff" />
+		<rect x="8" y="27" width="16" height="1" fill="#fff" />
+
+		<rect x="12" y="12" width="8" height="1" fill="#000" />
+		<rect x="11" y="13" width="1" height="6" fill="#000" />
+		<rect x="20" y="13" width="1" height="6" fill="#000" />
+		<rect x="12" y="19" width="8" height="1" fill="#000" />
+
+		<rect class="button" x="12" y="13" width="8" height="6" fill="#fff" />
+
+		<!-- <rect x="15" y="15" width="2" height="2" fill="#fff" /> -->
 	</svg>
-	<!-- <svg class="shadow-svg" width={size} height={size+80} viewBox="0 0 100 100">
-    <ellipse class="shadow" cx="60" cy="95" rx="35" ry="10" fill="#373737" />
-  </svg> -->
 </div>
 
 <style>
 	.pokeball {
 		animation: shake 1.25s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
 		overflow: visible;
+		image-rendering: pixelated;
+		image-rendering: -moz-crisp-edges;
+		image-rendering: crisp-edges;
 	}
 
 	.button {
 		animation: blink 0.5s alternate infinite;
 	}
-
-	/* .shadow {
-    opacity: 0.5;
-    animation: shadow-move 1.25s infinite;
-  } */
 
 	@keyframes shake {
 		0%,
@@ -111,15 +129,10 @@
 
 	@keyframes blink {
 		from {
-			fill: #eee;
+			fill: #fff;
 		}
 		to {
-			fill: #e74c3c;
+			fill: var(--game-red);
 		}
 	}
-
-	/* @keyframes shadow-move {
-    from { transform: scale(1); }
-    to { transform: scale(1.1); }
-  } */
 </style>

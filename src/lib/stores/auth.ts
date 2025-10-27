@@ -26,6 +26,8 @@ const initialState: AuthState = {
 function createAuthStore() {
 	const { subscribe, update } = writable<AuthState>(initialState);
 
+	let hasCheckedAuth = false;
+
 	return {
 		subscribe,
 		login: async (credentials: LoginRequest) => {
@@ -114,11 +116,13 @@ function createAuthStore() {
 			}));
 		},
 		checkAuth: async () => {
+			if (hasCheckedAuth) return;
+			hasCheckedAuth = true;
+
 			update((state) => ({ ...state, isLoading: true }));
 
 			try {
 				const response = await authApi.verify();
-				// Check for successful authentication (either "Login successful" or "Authentication verified")
 				if (
 					(response.message === 'Login successful' ||
 						response.message === 'Authentication verified') &&

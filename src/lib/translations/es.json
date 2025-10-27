@@ -95,5 +95,53 @@
     "sending": "Enviando...",
     "alreadyHaveCode": "¿Ya tienes un código de activación?",
     "activateHere": "Activar aquí"
+  },
+  "profile": {
+    "title": "Perfil",
+    "windowTitle": "Perfil de Usuario"
+  },
+  "settings": {
+    "title": "Configuración",
+    "windowTitle": "Configuración",
+    "theme": "Tema",
+    "language": "Idioma",
+    "languageEnglish": "Inglés",
+    "languageSpanish": "Español",
+    "themeLight": "Claro",
+    "themeDark": "Oscuro",
+    "themeSystem": "Sistema"
+  },
+  "friends": {
+    "title": "Amigos",
+    "windowTitle": "Amigos",
+    "tabs": {
+      "friends": "Amigos",
+      "sent": "Enviadas",
+      "received": "Recibidas",
+      "search": "Buscar"
+    },
+    "actions": {
+      "remove": "Eliminar",
+      "accept": "Aceptar",
+      "decline": "Rechazar",
+      "addFriend": "Agregar Amigo",
+      "search": "Buscar",
+      "previous": "Anterior",
+      "next": "Siguiente"
+    },
+    "messages": {
+      "noFriends": "Aún no tienes amigos",
+      "noSentRequests": "No hay solicitudes enviadas",
+      "noReceivedRequests": "No hay solicitudes recibidas",
+      "noUsersFound": "No se encontraron usuarios",
+      "searchPlaceholder": "Buscar usuarios...",
+      "status": "Estado:",
+      "page": "Página"
+    },
+    "status": {
+      "pending": "Pendiente",
+      "accepted": "Aceptada",
+      "declined": "Rechazada"
+    }
   }
 }

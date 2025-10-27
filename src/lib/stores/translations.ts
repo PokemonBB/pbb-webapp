@@ -99,6 +99,54 @@ interface Translations {
 		alreadyHaveCode: string;
 		activateHere: string;
 	};
+	profile: {
+		title: string;
+		windowTitle: string;
+	};
+	settings: {
+		title: string;
+		windowTitle: string;
+		theme: string;
+		language: string;
+		languageEnglish: string;
+		languageSpanish: string;
+		themeLight: string;
+		themeDark: string;
+		themeSystem: string;
+	};
+	friends: {
+		title: string;
+		windowTitle: string;
+		tabs: {
+			friends: string;
+			sent: string;
+			received: string;
+			search: string;
+		};
+		actions: {
+			remove: string;
+			accept: string;
+			decline: string;
+			addFriend: string;
+			search: string;
+			previous: string;
+			next: string;
+		};
+		messages: {
+			noFriends: string;
+			noSentRequests: string;
+			noReceivedRequests: string;
+			noUsersFound: string;
+			searchPlaceholder: string;
+			status: string;
+			page: string;
+		};
+		status: {
+			pending: string;
+			accepted: string;
+			declined: string;
+		};
+	};
 }
 
 interface TranslationState {
@@ -117,6 +165,7 @@ function createTranslationStore() {
 	const { subscribe, update } = writable<TranslationState>(defaultState);
 
 	let currentLanguage: Language = 'en';
+	let hasInitialized = false;
 
 	const loadTranslations = async (language: Language): Promise<Translations> => {
 		try {
@@ -156,6 +205,9 @@ function createTranslationStore() {
 			}
 		},
 		init: async () => {
+			if (hasInitialized) return;
+			hasInitialized = true;
+
 			// Get current language from userConfigStore
 			let currentState: { language: Language } = { language: 'en' };
 			const unsubscribe = userConfigStore.subscribe((state) => {

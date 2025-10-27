@@ -222,6 +222,106 @@ interface UpdateMyPasswordResponse {
 	success: boolean;
 }
 
+interface SendFriendRequestResponse {
+	message: string;
+	success: boolean;
+}
+
+interface AcceptFriendRequestResponse {
+	message: string;
+	success: boolean;
+}
+
+interface DeclineFriendRequestResponse {
+	message: string;
+	success: boolean;
+}
+
+interface Friend {
+	_id: string;
+	username: string;
+	email: string;
+	role: string;
+	active: boolean;
+	createdAt: string;
+	updatedAt: string;
+}
+
+interface FriendsResponse {
+	data: Friend[];
+	pagination: {
+		page: number;
+		limit: number;
+		total: number;
+		totalPages: number;
+		hasNext: boolean;
+		hasPrev: boolean;
+	};
+}
+
+interface GetFriendsParams {
+	page?: number;
+	limit?: number;
+}
+
+interface FriendRequest {
+	_id: string;
+	senderId: string;
+	receiverId: string;
+	sender: {
+		_id: string;
+		username: string;
+		email: string;
+	};
+	receiver: {
+		_id: string;
+		username: string;
+		email: string;
+	};
+	status: 'pending' | 'accepted' | 'declined';
+	createdAt: string;
+	updatedAt: string;
+}
+
+interface FriendRequestsResponse {
+	data: FriendRequest[];
+	pagination: {
+		page: number;
+		limit: number;
+		total: number;
+		totalPages: number;
+		hasNext: boolean;
+		hasPrev: boolean;
+	};
+}
+
+interface GetFriendRequestsParams {
+	page?: number;
+	limit?: number;
+}
+
+interface SentFriendRequestsResponse {
+	data: FriendRequest[];
+	pagination: {
+		page: number;
+		limit: number;
+		total: number;
+		totalPages: number;
+		hasNext: boolean;
+		hasPrev: boolean;
+	};
+}
+
+interface GetSentFriendRequestsParams {
+	page?: number;
+	limit?: number;
+}
+
+interface RemoveFriendResponse {
+	message: string;
+	success: boolean;
+}
+
 interface ApiError {
 	success: false;
 	message: string;
@@ -520,6 +620,92 @@ class ApiClient {
 			}
 		});
 	}
+
+	async sendFriendRequest(receiverId: string): Promise<SendFriendRequestResponse> {
+		return this.makeRequest<SendFriendRequestResponse>(`/friends/request/${receiverId}`, {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json'
+			}
+		});
+	}
+
+	async acceptFriendRequest(requestId: string): Promise<AcceptFriendRequestResponse> {
+		return this.makeRequest<AcceptFriendRequestResponse>(`/friends/accept/${requestId}`, {
+			method: 'PATCH',
+			headers: {
+				Accept: 'application/json'
+			}
+		});
+	}
+
+	async declineFriendRequest(requestId: string): Promise<DeclineFriendRequestResponse> {
+		return this.makeRequest<DeclineFriendRequestResponse>(`/friends/decline/${requestId}`, {
+			method: 'PATCH',
+			headers: {
+				Accept: 'application/json'
+			}
+		});
+	}
+
+	async getFriends(params: GetFriendsParams = {}): Promise<FriendsResponse> {
+		const searchParams = new URLSearchParams();
+		if (params.page) searchParams.append('page', params.page.toString());
+		if (params.limit) searchParams.append('limit', params.limit.toString());
+
+		const queryString = searchParams.toString();
+		const endpoint = queryString ? `/friends?${queryString}` : '/friends';
+
+		return this.makeRequest<FriendsResponse>(endpoint, {
+			method: 'GET',
+			headers: {
+				Accept: 'application/json'
+			}
+		});
+	}
+
+	async getFriendRequests(params: GetFriendRequestsParams = {}): Promise<FriendRequestsResponse> {
+		const searchParams = new URLSearchParams();
+		if (params.page) searchParams.append('page', params.page.toString());
+		if (params.limit) searchParams.append('limit', params.limit.toString());
+
+		const queryString = searchParams.toString();
+		const endpoint = queryString ? `/friends/requests?${queryString}` : '/friends/requests';
+
+		return this.makeRequest<FriendRequestsResponse>(endpoint, {
+			method: 'GET',
+			headers: {
+				Accept: 'application/json'
+			}
+		});
+	}
+
+	async getSentFriendRequests(
+		params: GetSentFriendRequestsParams = {}
+	): Promise<SentFriendRequestsResponse> {
+		const searchParams = new URLSearchParams();
+		if (params.page) searchParams.append('page', params.page.toString());
+		if (params.limit) searchParams.append('limit', params.limit.toString());
+
+		const queryString = searchParams.toString();
+		const endpoint = queryString ? `/friends/sent?${queryString}` : '/friends/sent';
+
+		return this.makeRequest<SentFriendRequestsResponse>(endpoint, {
+			method: 'GET',
+			headers: {
+				Accept: 'application/json'
+			}
+		});
+	}
+
+	async removeFriend(friendId: string): Promise<RemoveFriendResponse> {
+		return this.makeRequest<RemoveFriendResponse>(`/friends/${friendId}`, {
+			method: 'DELETE',
+			headers: {
+				Accept: 'application/json'
+			}
+		});
+	}
 }
 
 export const apiClient = new ApiClient(API_BASE_URL);
@@ -565,6 +751,17 @@ export const activationApi = {
 	resend: (data: ResendActivationRequest) => apiClient.resendActivation(data)
 };
 
+export const friendsApi = {
+	sendRequest: (receiverId: string) => apiClient.sendFriendRequest(receiverId),
+	acceptRequest: (requestId: string) => apiClient.acceptFriendRequest(requestId),
+	declineRequest: (requestId: string) => apiClient.declineFriendRequest(requestId),
+	getFriends: (params?: GetFriendsParams) => apiClient.getFriends(params),
+	getRequests: (params?: GetFriendRequestsParams) => apiClient.getFriendRequests(params),
+	getSentRequests: (params?: GetSentFriendRequestsParams) =>
+		apiClient.getSentFriendRequests(params),
+	removeFriend: (friendId: string) => apiClient.removeFriend(friendId)
+};
+
 export type {
 	LoginRequest,
 	RegisterRequest,
@@ -600,5 +797,17 @@ export type {
 	UpdateMyEmailRequest,
 	UpdateMyEmailResponse,
 	UpdateMyPasswordRequest,
-	UpdateMyPasswordResponse
+	UpdateMyPasswordResponse,
+	SendFriendRequestResponse,
+	AcceptFriendRequestResponse,
+	DeclineFriendRequestResponse,
+	Friend,
+	FriendsResponse,
+	GetFriendsParams,
+	FriendRequest,
+	FriendRequestsResponse,
+	GetFriendRequestsParams,
+	SentFriendRequestsResponse,
+	GetSentFriendRequestsParams,
+	RemoveFriendResponse
 };

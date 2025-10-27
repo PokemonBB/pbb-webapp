@@ -90,7 +90,7 @@
 	{:else}
 		<div class="min-h-screen" style="background-color: var(--bg-primary);">
 			<MainMenu />
-			<main class="ml-16 min-h-screen px-6 py-6">
+			<main id="app-main" class="ml-16 min-h-screen" style="position: relative;">
 				{@render children?.()}
 			</main>
 		</div>
