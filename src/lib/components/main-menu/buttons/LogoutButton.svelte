@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { authStore } from '$lib/stores/auth';
 	import { goto } from '$app/navigation';
+	import { translationStore } from '$lib/stores/translations';
 	import MainMenuButton from '$lib/components/main-menu/MainMenuButton.svelte';
 
 	async function handleLogout() {
@@ -11,8 +12,7 @@
 
 <MainMenuButton
 	icon="log-out"
-	loading={$authStore.isLoading}
-	disabled={$authStore.isLoading}
-	hoverClass="hover:bg-red-50 dark:hover:bg-red-900/20"
+	hoverClass="hover:bg-[var(--game-red)]/20 dark:hover:bg-[var(--game-red)]/20"
+	tooltip={$translationStore.translations?.common.logout || 'Logout'}
 	onclick={handleLogout}
 />

@@ -3,9 +3,9 @@
 	import { translationStore } from '$lib/stores/translations';
 	import { createEventDispatcher } from 'svelte';
 	import { globalZIndex } from '$lib/components/window/zindex';
-	import Loader from '$lib/components/common/Loader.svelte';
+	import Loader from '$lib/components/common/utils/Loader.svelte';
 	import { friendsApi, userApi, type Friend, type FriendRequest, type User } from '$lib/utils/api';
-	import Icon from '$lib/components/common/Icon.svelte';
+	import Icon from '$lib/components/common/utils/Icon.svelte';
 
 	interface Props {
 		visible?: boolean;
@@ -13,9 +13,17 @@
 		height?: number;
 		left?: number;
 		top?: number;
+		initialTab?: string;
 	}
 
-	let { visible = false, width = 1000, height = 700, left = 0, top = 0 }: Props = $props();
+	let {
+		visible = false,
+		width = 1000,
+		height = 700,
+		left = 0,
+		top = 0,
+		initialTab = 'friends'
+	}: Props = $props();
 
 	const dispatch = createEventDispatcher<{ close: void }>();
 
@@ -75,6 +83,7 @@
 
 	function handleClose() {
 		dispatch('close');
+		initialTab = 'friends';
 	}
 
 	function setActiveTab(tab: string) {
@@ -295,6 +304,8 @@
 	$effect(() => {
 		if (visible) {
 			globalZIndex.update((n) => n + 1);
+			activeTab = initialTab;
+			lastLoadedTab = null;
 		}
 	});
 
@@ -485,10 +496,10 @@
 									</div>
 									<div class="request-actions">
 										<button class="accept-button" onclick={() => acceptRequest(request._id)}>
-											<Icon name="checkbox" size="medium" />
+											<Icon name="check-box" size="medium" />
 										</button>
 										<button class="decline-button" onclick={() => declineRequest(request._id)}>
-											<Icon name="closebox" size="medium" />
+											<Icon name="close-box" size="medium" />
 										</button>
 									</div>
 								</div>
@@ -708,7 +719,6 @@
 	button {
 		padding: 6px 12px;
 		border: 1px solid var(--border-secondary);
-		border-radius: 4px;
 		cursor: pointer;
 		font-size: 0.9em;
 		transition: all 0.2s;

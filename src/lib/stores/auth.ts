@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store';
 import { authApi, type LoginRequest, type RegisterRequest, type ApiError } from '$lib/utils/api';
 import { userConfigStore } from './userConfig';
+import { contentLoadingStore } from './contentLoading';
 
 interface User {
 	id: string;
@@ -114,6 +115,7 @@ function createAuthStore() {
 				isLoading: false,
 				error: null
 			}));
+			contentLoadingStore.reset();
 		},
 		checkAuth: async () => {
 			if (hasCheckedAuth) return;

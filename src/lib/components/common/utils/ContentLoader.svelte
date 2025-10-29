@@ -1,40 +1,30 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { contentLoadingStore } from '$lib/stores/contentLoading';
-	import { translationStore } from '$lib/stores/translations';
-	import { userConfigStore } from '$lib/stores/userConfig';
-	import { goto } from '$app/navigation';
-	import Credits from '$lib/components/common/Credits.svelte';
-	import Loader from '$lib/components/common/Loader.svelte';
+	import Loader from './Loader.svelte';
+	import Credits from '../overlays/Credits.svelte';
 
-	onMount(() => {
-		userConfigStore.init();
-		translationStore.init();
-
-		// Start content loading
-		contentLoadingStore.startLoading();
-	});
-
-	$: progress = $contentLoadingStore.progress;
-	$: currentFile = $contentLoadingStore.currentFile;
-	$: totalFiles = $contentLoadingStore.totalFiles;
-	$: loadedFiles = $contentLoadingStore.loadedFiles;
-	$: isLoading = $contentLoadingStore.isLoading;
-	$: isComplete = $contentLoadingStore.isComplete;
-	$: error = $contentLoadingStore.error;
-	$: failedFiles = $contentLoadingStore.failedFiles;
-
-	// Redirect to main app when loading is complete
-	$: if (isComplete && !isLoading) {
-		setTimeout(() => {
-			goto('/');
-		}, 1000);
+	interface Props {
+		contentLoadingStarted?: boolean;
 	}
-</script>
 
-<svelte:head>
-	<title>Loading Content - Pokémon BattleBrawl</title>
-</svelte:head>
+	let { contentLoadingStarted = false }: Props = $props();
+
+	let progress = $state(0);
+	let currentFile = $state('');
+	let totalFiles = $state(0);
+	let loadedFiles = $state(0);
+	let isLoading = $state(true);
+	let error = $state<string | null>('');
+
+	$effect(() => {
+		progress = $contentLoadingStore.progress;
+		currentFile = $contentLoadingStore.currentFile;
+		totalFiles = $contentLoadingStore.totalFiles;
+		loadedFiles = $contentLoadingStore.loadedFiles;
+		isLoading = $contentLoadingStore.isLoading;
+		error = $contentLoadingStore.error;
+	});
+</script>
 
 <div
 	class="flex min-h-screen items-center justify-center px-4"
@@ -62,7 +52,7 @@
 				<button
 					class="rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white"
 					style="background-color: var(--accent-primary);"
-					on:click={() => contentLoadingStore.startLoading()}
+					onclick={() => contentLoadingStore.startLoading()}
 				>
 					Retry
 				</button>
@@ -73,7 +63,6 @@
 					<Loader size="large" />
 				</div>
 
-				<!-- Progress Bar -->
 				<div class="mb-4">
 					<div class="mb-1 flex justify-between text-xs" style="color: var(--text-secondary);">
 						<span>{progress}%</span>

@@ -47,6 +47,23 @@ html, body {
 	--error-text: #dc2626;
 	--error-border: #fecaca;
 
+	/* Notification colors */
+	--notification-info-bg: #f3f4f6;
+	--notification-info-text: #6b7280;
+	--notification-info-border: #d1d5db;
+	--notification-success-bg: #f0fdf4;
+	--notification-success-text: #166534;
+	--notification-success-border: #bbf7d0;
+	--notification-warning-bg: #fef3c7;
+	--notification-warning-text: #92400e;
+	--notification-warning-border: #fcd34d;
+	--notification-error-bg: #fef2f2;
+	--notification-error-text: #dc2626;
+	--notification-error-border: #fecaca;
+	--notification-alert-bg: #dbeafe;
+	--notification-alert-text: #1e40af;
+	--notification-alert-border: #93c5fd;
+
 	/* GAME COLORS */
 	--game-red: #dc2626;
 	
@@ -83,6 +100,23 @@ html, body {
 	--error-bg: #7f1d1d;
 	--error-text: #dc2626;
 	--error-border: #991b1b;
+
+	/* Notification colors */
+	--notification-info-bg: #374151;
+	--notification-info-text: #d1d5db;
+	--notification-info-border: #4b5563;
+	--notification-success-bg: #064e3b;
+	--notification-success-text: #10b981;
+	--notification-success-border: #065f46;
+	--notification-warning-bg: #713f12;
+	--notification-warning-text: #fbbf24;
+	--notification-warning-border: #d97706;
+	--notification-error-bg: #7f1d1d;
+	--notification-error-text: #dc2626;
+	--notification-error-border: #991b1b;
+	--notification-alert-bg: #1e3a8a;
+	--notification-alert-text: #93c5fd;
+	--notification-alert-border: #1e40af;
 
 	/* GAME COLORS */
 	--game-red: #dc2626;

@@ -6,7 +6,7 @@
 	import { userConfigStore } from '$lib/stores/userConfig';
 	import { translationStore } from '$lib/stores/translations';
 	import { activationApi } from '$lib/utils/api';
-	import Credits from '$lib/components/common/Credits.svelte';
+	import Credits from '$lib/components/common/overlays/Credits.svelte';
 
 	let activationCode = '';
 	let isLoading = false;

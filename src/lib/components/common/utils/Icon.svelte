@@ -17,8 +17,11 @@
 		| 'flag-es'
 		| 'maximize'
 		| 'restore'
-		| 'checkbox'
-		| 'closebox';
+		| 'check-box'
+		| 'close-box'
+		| 'alert'
+		| 'notification'
+		| 'info-box';
 
 	interface IconProps {
 		name: IconName;

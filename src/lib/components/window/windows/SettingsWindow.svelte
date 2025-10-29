@@ -2,8 +2,8 @@
 	import Window from '$lib/components/window/Window.svelte';
 	import { translationStore } from '$lib/stores/translations';
 	import { createEventDispatcher } from 'svelte';
-	import ThemeToggle from '$lib/components/common/ThemeToggle.svelte';
-	import LanguageToggle from '$lib/components/common/LanguageToggle.svelte';
+	import ThemeToggle from '$lib/components/common/configurations/ThemeToggle.svelte';
+	import LanguageToggle from '$lib/components/common/configurations/LanguageToggle.svelte';
 	import { globalZIndex } from '$lib/components/window/zindex';
 
 	interface Props {

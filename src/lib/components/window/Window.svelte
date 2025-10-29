@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount, createEventDispatcher } from 'svelte';
 	import { globalZIndex } from './zindex';
-	import Icon from '$lib/components/common/Icon.svelte';
+	import Icon from '$lib/components/common/utils/Icon.svelte';
 
 	interface Props {
 		left?: number;
@@ -383,6 +383,8 @@
 		height: calc(100% - 38px);
 		/* Allow text selection and inputs to behave normally inside the window */
 		user-select: text;
+		overflow-y: auto;
+		overflow-x: hidden;
 	}
 
 	/* resize handles */

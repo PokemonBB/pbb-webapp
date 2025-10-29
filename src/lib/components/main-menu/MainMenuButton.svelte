@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Icon from '$lib/components/common/Icon.svelte';
-	import ToolTip from '$lib/components/common/ToolTip.svelte';
+	import Icon from '$lib/components/common/utils/Icon.svelte';
+	import ToolTip from '$lib/components/common/utils/ToolTip.svelte';
 
 	interface Props {
 		icon: string;
@@ -24,7 +24,7 @@
 </script>
 
 {#if tooltip}
-	<ToolTip text={tooltip}>
+	<ToolTip text={tooltip} position="right">
 		{#snippet children(handlers: any)}
 			<button
 				class="flex w-full cursor-pointer items-center justify-center rounded-lg p-3 transition-colors {hoverClass} {active

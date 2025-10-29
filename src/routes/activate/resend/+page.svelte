@@ -5,8 +5,8 @@
 	import { userConfigStore } from '$lib/stores/userConfig';
 	import { translationStore } from '$lib/stores/translations';
 	import { activationApi } from '$lib/utils/api';
-	import Credits from '$lib/components/common/Credits.svelte';
-	import Loader from '$lib/components/common/Loader.svelte';
+	import Credits from '$lib/components/common/overlays/Credits.svelte';
+	import Loader from '$lib/components/common/utils/Loader.svelte';
 
 	let email = '';
 	let isLoading = false;

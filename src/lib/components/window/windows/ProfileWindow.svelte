@@ -3,6 +3,9 @@
 	import { translationStore } from '$lib/stores/translations';
 	import { createEventDispatcher } from 'svelte';
 	import { globalZIndex } from '$lib/components/window/zindex';
+	import { userApi, type UserProfile } from '$lib/utils/api';
+
+	let user = $state<UserProfile | null>(null);
 
 	interface Props {
 		visible?: boolean;
@@ -25,6 +28,9 @@
 		if (visible) {
 			globalZIndex.update((n) => n + 1);
 		}
+		userApi.getProfile().then((response) => {
+			user = response.user;
+		});
 	});
 </script>
 
@@ -43,6 +49,15 @@
 			<h2 class="mb-4 text-xl font-semibold">
 				{$translationStore.translations?.profile.title || 'Profile'}
 			</h2>
+			<p class="mb-4">
+				Username: {user?.username}
+			</p>
+			<p class="mb-4">
+				Email: {user?.email}
+			</p>
+			<p class="mb-4">
+				Role: {user?.role}
+			</p>
 			<p class="mb-4">
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
 				labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco

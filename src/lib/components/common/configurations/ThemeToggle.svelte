@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { userConfigStore, type Theme } from '$lib/stores/userConfig';
 	import { translationStore } from '$lib/stores/translations';
-	import Icon from '$lib/components/common/Icon.svelte';
+	import Icon from '$lib/components/common/utils/Icon.svelte';
 
 	function setTheme(theme: Theme) {
 		userConfigStore.setTheme(theme);

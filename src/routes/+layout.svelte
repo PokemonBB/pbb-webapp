@@ -8,17 +8,20 @@
 	import { userConfigStore } from '$lib/stores/userConfig';
 	import { translationStore } from '$lib/stores/translations';
 	import { contentLoadingStore } from '$lib/stores/contentLoading';
-	import Loader from '$lib/components/common/Loader.svelte';
+	import { audioPermissionsStore } from '$lib/stores/audioPermissions';
+	import Loader from '$lib/components/common/utils/Loader.svelte';
+	import ContentLoader from '$lib/components/common/utils/ContentLoader.svelte';
 	import MainMenu from '$lib/components/main-menu/MainMenu.svelte';
+	import NotificationsContainer from '$lib/components/common/notifications/NotificationsContainer.svelte';
 
 	let { children } = $props();
 
-	onMount(() => {
-		// Initialize translations first
-		translationStore.init();
+	let contentLoadingStarted = $state(false);
 
-		// Then check authentication
+	onMount(() => {
+		translationStore.init();
 		authStore.checkAuth();
+		audioPermissionsStore.requestPermission();
 	});
 
 	$effect(() => {
@@ -33,28 +36,23 @@
 				'/activate/resend'
 			];
 			const isOnAuthPage = authPages.some((page) => currentPath.includes(page));
-			const isOnContentLoading = currentPath === '/content-loading';
 
 			if ($authStore.isAuthenticated === false && $authStore.isLoading === false) {
-				// Not authenticated: redirect to login unless on auth pages
 				if (!isOnAuthPage) {
 					goto('/login');
 				}
 			} else if ($authStore.isAuthenticated === true && $authStore.isLoading === false) {
-				// Initialize user configuration only when authenticated
 				userConfigStore.init();
 
-				// Authenticated: check content loading status
-				if (!$contentLoadingStore.isComplete) {
-					// Content not loaded: go to content loading
-					if (!isOnContentLoading) {
-						goto('/content-loading');
-					}
-				} else {
-					// Content loaded: redirect away from auth pages and content loading
-					if (isOnAuthPage || isOnContentLoading) {
-						goto('/');
-					}
+				if (!contentLoadingStarted && !$contentLoadingStore.isComplete) {
+					contentLoadingStarted = true;
+					userConfigStore.init();
+					translationStore.init();
+					contentLoadingStore.startLoading();
+				}
+
+				if (isOnAuthPage) {
+					goto('/');
 				}
 			}
 		}
@@ -75,7 +73,6 @@
 {:else if $authStore.isAuthenticated}
 	{@const currentPath = $page.url.pathname}
 	{@const noHeaderPaths = [
-		'/content-loading',
 		'/login',
 		'/register',
 		'/forgot-password',
@@ -85,7 +82,9 @@
 	]}
 	{@const shouldHideHeader = noHeaderPaths.some((path) => currentPath.startsWith(path))}
 
-	{#if shouldHideHeader}
+	{#if !$contentLoadingStore.isComplete}
+		<ContentLoader {contentLoadingStarted} />
+	{:else if shouldHideHeader}
 		{@render children?.()}
 	{:else}
 		<div class="min-h-screen" style="background-color: var(--bg-primary);">
@@ -98,3 +97,5 @@
 {:else}
 	{@render children?.()}
 {/if}
+
+<NotificationsContainer />
