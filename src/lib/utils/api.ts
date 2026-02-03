@@ -1,7 +1,7 @@
 import { config } from '$lib/config/environment';
 
 // Use environment-based configuration
-export const API_BASE_URL = config.API_BASE_URL;
+export const API_BASE_URL = config.API_BASE_URL + "/api";
 
 interface LoginRequest {
 	username: string;
@@ -84,12 +84,14 @@ interface AuditLog {
 }
 
 interface AuditLogsResponse {
-	audits: AuditLog[];
+	data: AuditLog[];
 	pagination: {
-		page: string;
-		limit: string;
+		page: number;
+		limit: number;
 		total: number;
-		pages: number;
+		totalPages: number;
+		hasNext: boolean;
+		hasPrev: boolean;
 	};
 }
 
@@ -148,6 +150,20 @@ interface SearchUsersParams {
 interface GetUsersParams {
 	page?: number;
 	limit?: number;
+}
+
+type NotificationType = 'notification' | 'info' | 'warning' | 'error' | 'success';
+
+interface CreateNotificationRequest {
+	message: string;
+	type?: NotificationType;
+	receiverId?: string;
+	sendToAll?: boolean;
+}
+
+interface CreateNotificationResponse {
+	message: string;
+	success: boolean;
 }
 
 interface CreateInvitationRequest {
@@ -326,6 +342,44 @@ interface ApiError {
 	success: false;
 	message: string;
 	status: number;
+}
+
+interface DocChild {
+	name: string;
+	type: 'directory' | 'file';
+	path: string;
+}
+
+interface DocDirectoryResponse {
+	name: string;
+	type: 'directory';
+	path: string;
+	content: string;
+	children: DocChild[];
+}
+
+interface DocFileResponse {
+	name: string;
+	type: 'file';
+	path: string;
+	content: string;
+}
+
+type DocResponse = DocDirectoryResponse | DocFileResponse;
+
+interface DocSearchResult {
+	path: string;
+	name: string;
+	line: number;
+	snippet: string;
+}
+
+interface DocsSearchResponse {
+	results: DocSearchResult[];
+}
+
+interface SearchDocsParams {
+	q: string;
 }
 
 class ApiClient {
@@ -577,6 +631,17 @@ class ApiClient {
 		});
 	}
 
+	async createNotification(data: CreateNotificationRequest): Promise<CreateNotificationResponse> {
+		return this.makeRequest<CreateNotificationResponse>('/notifications', {
+			method: 'POST',
+			body: JSON.stringify(data),
+			headers: {
+				'Content-Type': 'application/json',
+				Accept: 'application/json'
+			}
+		});
+	}
+
 	async createInvitation(data?: CreateInvitationRequest): Promise<CreateInvitationResponse> {
 		return this.makeRequest<CreateInvitationResponse>('/invitations', {
 			method: 'POST',
@@ -706,6 +771,38 @@ class ApiClient {
 			}
 		});
 	}
+
+	async getDocsRoot(): Promise<DocResponse> {
+		return this.makeRequest<DocResponse>('/docs', {
+			method: 'GET',
+			headers: {
+				Accept: 'application/json'
+			}
+		});
+	}
+
+	async getDocsByPath(path: string): Promise<DocResponse> {
+		const normalizedPath = path.replace(/^\//, '').trim();
+		const endpoint = normalizedPath ? `/docs/${normalizedPath}` : '/docs';
+		return this.makeRequest<DocResponse>(endpoint, {
+			method: 'GET',
+			headers: {
+				Accept: 'application/json'
+			}
+		});
+	}
+
+	async searchDocs(params: SearchDocsParams): Promise<DocsSearchResponse> {
+		const searchParams = new URLSearchParams();
+		searchParams.append('q', params.q);
+
+		return this.makeRequest<DocsSearchResponse>(`/docs/search?${searchParams.toString()}`, {
+			method: 'GET',
+			headers: {
+				Accept: 'application/json'
+			}
+		});
+	}
 }
 
 export const apiClient = new ApiClient(API_BASE_URL);
@@ -742,6 +839,10 @@ export const auditApi = {
 	getAuditLogs: (params?: GetAuditLogsParams) => apiClient.getAuditLogs(params)
 };
 
+export const notificationApi = {
+	create: (data: CreateNotificationRequest) => apiClient.createNotification(data)
+};
+
 export const invitationApi = {
 	create: (data?: CreateInvitationRequest) => apiClient.createInvitation(data)
 };
@@ -762,7 +863,16 @@ export const friendsApi = {
 	removeFriend: (friendId: string) => apiClient.removeFriend(friendId)
 };
 
+export const docsApi = {
+	getRoot: () => apiClient.getDocsRoot(),
+	getByPath: (path: string) => apiClient.getDocsByPath(path),
+	search: (params: SearchDocsParams) => apiClient.searchDocs(params)
+};
+
 export type {
+	NotificationType,
+	CreateNotificationRequest,
+	CreateNotificationResponse,
 	LoginRequest,
 	RegisterRequest,
 	ForgotPasswordRequest,
@@ -809,5 +919,12 @@ export type {
 	GetFriendRequestsParams,
 	SentFriendRequestsResponse,
 	GetSentFriendRequestsParams,
-	RemoveFriendResponse
+	RemoveFriendResponse,
+	DocChild,
+	DocDirectoryResponse,
+	DocFileResponse,
+	DocResponse,
+	DocSearchResult,
+	DocsSearchResponse,
+	SearchDocsParams
 };

@@ -1,12 +1,12 @@
 // Environment configurations
 const environments = {
 	local: {
-		API_BASE_URL: 'http://localhost:3000/api',
+		API_BASE_URL: 'http://localhost:3000',
 		CDS_BASE_URL: 'http://localhost:3003/api',
 		environment: 'local'
 	},
 	production: {
-		API_BASE_URL: 'https://api.example.com/api',
+		API_BASE_URL: 'https://api.example.com',
 		CDS_BASE_URL: 'https://cds.example.com/api',
 		environment: 'production'
 	}
