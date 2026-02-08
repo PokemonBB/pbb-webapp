@@ -31,32 +31,40 @@ function createNotificationStore() {
 			type: NotificationType = 'info',
 			isClickable: boolean = false,
 			onClick?: () => void,
-			duration: number = 5000
+			duration: number = 5000,
+			id?: string
 		): string => {
-			const id = `notification-${++notificationId}`;
+			const notificationIdResolved = id ?? `notification-${++notificationId}`;
 
-			update((state) => ({
-				...state,
-				notifications: [
-					...state.notifications,
-					{
-						id,
-						message,
-						type,
-						duration,
-						isClickable,
-						onClick
-					}
-				]
-			}));
+			let added = false;
+			update((state) => {
+				if (id && state.notifications.some((n) => n.id === id)) {
+					return state;
+				}
+				added = true;
+				return {
+					...state,
+					notifications: [
+						...state.notifications,
+						{
+							id: notificationIdResolved,
+							message,
+							type,
+							duration,
+							isClickable,
+							onClick
+						}
+					]
+				};
+			});
 
-			if (duration > 0) {
+			if (added && duration > 0) {
 				setTimeout(() => {
-					notificationStore.remove(id);
+					notificationStore.remove(notificationIdResolved);
 				}, duration);
 			}
 
-			return id;
+			return notificationIdResolved;
 		},
 		remove: (id: string) => {
 			update((state) => ({

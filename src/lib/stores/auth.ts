@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
 import { authApi, type LoginRequest, type RegisterRequest, type ApiError } from '$lib/utils/api';
+import { socketService } from '$lib/connections';
 import { userConfigStore } from './userConfig';
 import { contentLoadingStore } from './contentLoading';
 
@@ -101,6 +102,8 @@ function createAuthStore() {
 		},
 		logout: async () => {
 			update((state) => ({ ...state, isLoading: true }));
+
+			socketService.disconnect();
 
 			try {
 				await authApi.logout();

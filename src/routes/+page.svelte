@@ -5,7 +5,9 @@
 	import MainMap from '$lib/game/components/main-map/MainMap.svelte';
 
 	function handleCityClick(cityName: string) {
-		alert(`Clicked on city: ${cityName}`);
+		notificationStore.add(`Clicked on city: ${cityName}`, 'notification', true, () => {
+			windowControlStore.openFriendsWindow('received');
+		});
 	}
 </script>
 

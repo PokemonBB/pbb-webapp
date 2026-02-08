@@ -9,6 +9,7 @@
 	import { translationStore } from '$lib/stores/translations';
 	import { contentLoadingStore } from '$lib/stores/contentLoading';
 	import { audioPermissionsStore } from '$lib/stores/audioPermissions';
+	import { socketService } from '$lib/connections';
 	import Loader from '$lib/components/common/utils/Loader.svelte';
 	import ContentLoader from '$lib/components/common/utils/ContentLoader.svelte';
 	import MainMenu from '$lib/components/main-menu/MainMenu.svelte';
@@ -38,10 +39,12 @@
 			const isOnAuthPage = authPages.some((page) => currentPath.includes(page));
 
 			if ($authStore.isAuthenticated === false && $authStore.isLoading === false) {
+				socketService.disconnect();
 				if (!isOnAuthPage) {
 					goto('/login');
 				}
 			} else if ($authStore.isAuthenticated === true && $authStore.isLoading === false) {
+				socketService.connect();
 				userConfigStore.init();
 
 				if (!contentLoadingStarted && !$contentLoadingStore.isComplete) {

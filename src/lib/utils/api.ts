@@ -106,11 +106,12 @@ interface UserProfile {
 	email: string;
 	role: string;
 	active: boolean;
+	canInvite?: boolean;
 	createdAt: string;
 	updatedAt: string;
-	configuration: {
-		language: string;
-		theme: string;
+	configuration?: {
+		language?: string;
+		theme?: string;
 	};
 }
 
@@ -125,6 +126,7 @@ interface User {
 	email: string;
 	role: string;
 	active: boolean;
+	canInvite?: boolean;
 	createdAt: string;
 	updatedAt: string;
 }
