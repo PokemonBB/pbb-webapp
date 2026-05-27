@@ -95,9 +95,20 @@ interface AuditLogsResponse {
 	};
 }
 
+interface AuditFilterParams {
+	username?: string;
+	userId?: string;
+	action?: string;
+	resource?: string;
+	resourceId?: string;
+	dateFrom?: string;
+	dateTo?: string;
+}
+
 interface GetAuditLogsParams {
 	limit?: number;
 	page?: number;
+	filters?: AuditFilterParams;
 }
 
 interface UserProfile {
@@ -166,6 +177,11 @@ interface CreateNotificationRequest {
 interface CreateNotificationResponse {
 	message: string;
 	success: boolean;
+}
+
+interface DeleteAllNotificationsResponse {
+	message: string;
+	deletedCount: number;
 }
 
 interface CreateInvitationRequest {
@@ -346,6 +362,178 @@ interface ApiError {
 	status: number;
 }
 
+type DamageMultiplier = 'x2' | 'x0.5' | 'x0' | 'x1';
+
+interface TypeReference {
+	id: number;
+	name: string;
+}
+
+interface DamageRelations {
+	double_damage_from: TypeReference[];
+	double_damage_to: TypeReference[];
+	half_damage_from: TypeReference[];
+	half_damage_to: TypeReference[];
+	no_damage_from: TypeReference[];
+	no_damage_to: TypeReference[];
+}
+
+interface PokemonType {
+	_id: string;
+	id: number;
+	name: string;
+	color: string;
+	names: Record<string, string>;
+	damage_relations: DamageRelations;
+	move_damage_class: { name: string } | null;
+}
+
+interface UpdateDamageRelationRequest {
+	attackerId: number;
+	defenderId: number;
+	multiplier: DamageMultiplier;
+}
+
+interface UpdateDamageRelationResponse {
+	message: string;
+	attacker: PokemonType;
+	defender: PokemonType;
+}
+
+interface PokemonTypeSlot {
+	slot: number;
+	type: PokemonType;
+}
+
+interface PokemonStat {
+	name: string;
+	base_stat: number;
+}
+
+interface Pokemon {
+	_id: string;
+	id: number;
+	name: string;
+	types: PokemonTypeSlot[];
+	base_experience: number;
+	height: number;
+	weight: number;
+	stats: PokemonStat[];
+	createdAt?: string;
+	updatedAt?: string;
+}
+
+interface PokemonsResponse {
+	data: Pokemon[];
+	pagination: {
+		page: number;
+		limit: number;
+		total: number;
+		totalPages: number;
+		hasNext: boolean;
+		hasPrev: boolean;
+	};
+}
+
+interface GetPokemonsParams {
+	page?: number;
+	limit?: number;
+	types?: number[];
+}
+
+interface SearchPokemonsParams {
+	query: string;
+	page?: number;
+	limit?: number;
+}
+
+interface UpdatePokemonTypeSlotRequest {
+	slot: number;
+	typeId: number;
+}
+
+interface UpdatePokemonStatRequest {
+	name: string;
+	base_stat: number;
+}
+
+interface UpdatePokemonRequest {
+	types?: UpdatePokemonTypeSlotRequest[];
+	stats?: UpdatePokemonStatRequest[];
+}
+
+interface IdNameRef {
+	id: number;
+	name: string;
+}
+
+interface MoveMeta {
+	ailment: string;
+	ailment_chance: number;
+	category: string;
+	crit_rate: number;
+	drain: number;
+	flinch_chance: number;
+	healing: number;
+	max_hits: number | null;
+	max_turns: number | null;
+	min_hits: number | null;
+	min_turns: number | null;
+	stat_chance: number;
+}
+
+interface FlavorTextEntries {
+	en: string;
+	es: string;
+}
+
+interface Move {
+	_id: string;
+	id: number;
+	name: string;
+	names: Record<string, string>;
+	accuracy: number | null;
+	power: number;
+	pp: number;
+	priority: number;
+	damage_class: IdNameRef;
+	type: PokemonType | string;
+	target: IdNameRef;
+	meta: MoveMeta;
+	flavor_text_entries: FlavorTextEntries;
+	learned_by_pokemon: Pokemon[] | string[];
+	createdAt?: string;
+	updatedAt?: string;
+}
+
+interface MovesResponse {
+	data: Move[];
+	pagination: {
+		page: number;
+		limit: number;
+		total: number;
+		totalPages: number;
+		hasNext: boolean;
+		hasPrev: boolean;
+	};
+}
+
+interface GetMovesParams {
+	page?: number;
+	limit?: number;
+	populate?: string;
+	types?: number[];
+}
+
+interface UpdateMoveRequest {
+	accuracy?: number | null;
+	power?: number;
+	pp?: number;
+	priority?: number;
+	typeId?: number;
+	learned_by_pokemon?: number[];
+}
+
 interface DocChild {
 	name: string;
 	type: 'directory' | 'file';
@@ -511,6 +699,16 @@ class ApiClient {
 		const searchParams = new URLSearchParams();
 		if (params?.limit) searchParams.append('limit', params.limit.toString());
 		if (params?.page) searchParams.append('page', params.page.toString());
+		if (params?.filters) {
+			const f = params.filters;
+			if (f.username) searchParams.append('username', f.username);
+			if (f.userId) searchParams.append('userId', f.userId);
+			if (f.action) searchParams.append('action', f.action);
+			if (f.resource) searchParams.append('resource', f.resource);
+			if (f.resourceId) searchParams.append('resourceId', f.resourceId);
+			if (f.dateFrom) searchParams.append('dateFrom', f.dateFrom);
+			if (f.dateTo) searchParams.append('dateTo', f.dateTo);
+		}
 
 		const queryString = searchParams.toString();
 		const url = queryString ? `/audit?${queryString}` : '/audit';
@@ -521,6 +719,60 @@ class ApiClient {
 				Accept: 'application/json'
 			}
 		});
+	}
+
+	async resetAndSeed(options?: {
+		collections?: string[];
+	}): Promise<{ message: string; dropped: string[]; seeded: string[] }> {
+		return this.makeRequest<{ message: string; dropped: string[]; seeded: string[] }>(
+			'/database/seed/reset',
+			{
+				method: 'POST',
+				body: options?.collections ? JSON.stringify({ collections: options.collections }) : undefined,
+				headers: {
+					'Content-Type': 'application/json',
+					Accept: 'application/json'
+				}
+			}
+		);
+	}
+
+	async getExportCollections(): Promise<{ collections: string[] }> {
+		return this.makeRequest<{ collections: string[] }>('/database/collections', {
+			method: 'GET',
+			headers: { Accept: 'application/json' }
+		});
+	}
+
+	async downloadExport(collections: string[]): Promise<void> {
+		const url = `${this.baseUrl}/database/export`;
+		const response = await fetch(url, {
+			method: 'POST',
+			credentials: 'include',
+			mode: 'cors',
+			headers: {
+				'Content-Type': 'application/json',
+				Accept: 'application/json'
+			},
+			body: JSON.stringify({ collections })
+		});
+		if (!response.ok) {
+			const err = await response.json().catch(() => ({ message: 'Export failed' }));
+			throw { success: false, message: err.message || 'Export failed', status: response.status } as ApiError;
+		}
+		const disposition = response.headers.get('Content-Disposition');
+		let filename = 'export.json';
+		if (disposition) {
+			const match = /filename="?([^";\n]+)"?/.exec(disposition);
+			if (match) filename = match[1].trim();
+		}
+		const blob = await response.blob();
+		const objectUrl = URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.href = objectUrl;
+		a.download = filename;
+		a.click();
+		URL.revokeObjectURL(objectUrl);
 	}
 
 	async logout(): Promise<ApiResponse> {
@@ -641,6 +893,13 @@ class ApiClient {
 				'Content-Type': 'application/json',
 				Accept: 'application/json'
 			}
+		});
+	}
+
+	async deleteAllNotifications(): Promise<DeleteAllNotificationsResponse> {
+		return this.makeRequest<DeleteAllNotificationsResponse>('/notifications', {
+			method: 'DELETE',
+			headers: { Accept: 'application/json' }
 		});
 	}
 
@@ -794,6 +1053,125 @@ class ApiClient {
 		});
 	}
 
+	async getPokemonTypes(): Promise<PokemonType[]> {
+		return this.makeRequest<PokemonType[]>('/pokemon/types', {
+			method: 'GET',
+			headers: { Accept: 'application/json' }
+		});
+	}
+
+	async getPokemonTypeById(id: number): Promise<PokemonType> {
+		return this.makeRequest<PokemonType>(`/pokemon/types/${id}`, {
+			method: 'GET',
+			headers: { Accept: 'application/json' }
+		});
+	}
+
+	async updateDamageRelation(
+		data: UpdateDamageRelationRequest
+	): Promise<UpdateDamageRelationResponse> {
+		return this.makeRequest<UpdateDamageRelationResponse>('/pokemon/types/damage-relation', {
+			method: 'PATCH',
+			body: JSON.stringify(data),
+			headers: {
+				'Content-Type': 'application/json',
+				Accept: 'application/json'
+			}
+		});
+	}
+
+	async getPokemons(params: GetPokemonsParams = {}): Promise<PokemonsResponse> {
+		const searchParams = new URLSearchParams();
+		if (params.page) searchParams.append('page', params.page.toString());
+		if (params.limit) searchParams.append('limit', params.limit.toString());
+		if (params.types?.length)
+			searchParams.append('types', params.types.join(','));
+		const queryString = searchParams.toString();
+		const endpoint = queryString ? `/pokemon/pokemons?${queryString}` : '/pokemon/pokemons';
+		return this.makeRequest<PokemonsResponse>(endpoint, {
+			method: 'GET',
+			headers: { Accept: 'application/json' }
+		});
+	}
+
+	async searchPokemons(params: SearchPokemonsParams): Promise<PokemonsResponse> {
+		const searchParams = new URLSearchParams();
+		searchParams.append('query', params.query);
+		if (params.page) searchParams.append('page', params.page.toString());
+		if (params.limit) searchParams.append('limit', params.limit.toString());
+		return this.makeRequest<PokemonsResponse>(
+			`/pokemon/pokemons/search?${searchParams.toString()}`,
+			{
+				method: 'GET',
+				headers: { Accept: 'application/json' }
+			}
+		);
+	}
+
+	async getPokemonById(id: number): Promise<Pokemon> {
+		return this.makeRequest<Pokemon>(`/pokemon/pokemons/${id}`, {
+			method: 'GET',
+			headers: { Accept: 'application/json' }
+		});
+	}
+
+	async updatePokemon(id: number, data: UpdatePokemonRequest): Promise<Pokemon> {
+		return this.makeRequest<Pokemon>(`/pokemon/pokemons/${id}`, {
+			method: 'PATCH',
+			body: JSON.stringify(data),
+			headers: {
+				'Content-Type': 'application/json',
+				Accept: 'application/json'
+			}
+		});
+	}
+
+	async getMovesByPokemonId(
+		pokemonId: number,
+		options?: { populate?: 'type' }
+	): Promise<Move[]> {
+		const url =
+			options?.populate === 'type'
+				? `/pokemon/pokemons/${pokemonId}/moves?populate=type`
+				: `/pokemon/pokemons/${pokemonId}/moves`;
+		return this.makeRequest<Move[]>(url, {
+			method: 'GET',
+			headers: { Accept: 'application/json' }
+		});
+	}
+
+	async getMoves(params: GetMovesParams = {}): Promise<MovesResponse> {
+		const searchParams = new URLSearchParams();
+		if (params.page) searchParams.append('page', params.page.toString());
+		if (params.limit) searchParams.append('limit', params.limit.toString());
+		if (params.populate) searchParams.append('populate', params.populate);
+		if (params.types?.length) searchParams.append('types', params.types.join(','));
+		const queryString = searchParams.toString();
+		const endpoint = queryString ? `/pokemon/moves?${queryString}` : '/pokemon/moves';
+		return this.makeRequest<MovesResponse>(endpoint, {
+			method: 'GET',
+			headers: { Accept: 'application/json' }
+		});
+	}
+
+	async getMoveById(id: number): Promise<Move> {
+		return this.makeRequest<Move>(`/pokemon/moves/${id}`, {
+			method: 'GET',
+			headers: { Accept: 'application/json' }
+		});
+	}
+
+	async updateMove(id: number, data: UpdateMoveRequest): Promise<Move> {
+		return this.makeRequest<Move>(`/pokemon/moves/${id}`, {
+			method: 'PATCH',
+			body: JSON.stringify(data),
+			headers: {
+				'Content-Type': 'application/json',
+				Accept: 'application/json'
+			}
+		});
+	}
+
 	async searchDocs(params: SearchDocsParams): Promise<DocsSearchResponse> {
 		const searchParams = new URLSearchParams();
 		searchParams.append('q', params.q);
@@ -842,7 +1220,17 @@ export const auditApi = {
 };
 
 export const notificationApi = {
-	create: (data: CreateNotificationRequest) => apiClient.createNotification(data)
+	create: (data: CreateNotificationRequest) => apiClient.createNotification(data),
+	deleteAll: () => apiClient.deleteAllNotifications()
+};
+
+export const seedApi = {
+	resetAndSeed: (options?: { collections?: string[] }) => apiClient.resetAndSeed(options)
+};
+
+export const exportApi = {
+	getCollections: () => apiClient.getExportCollections(),
+	downloadExport: (collections: string[]) => apiClient.downloadExport(collections)
 };
 
 export const invitationApi = {
@@ -865,6 +1253,26 @@ export const friendsApi = {
 	removeFriend: (friendId: string) => apiClient.removeFriend(friendId)
 };
 
+export const pokemonApi = {
+	getTypes: () => apiClient.getPokemonTypes(),
+	getTypeById: (id: number) => apiClient.getPokemonTypeById(id),
+	updateDamageRelation: (data: UpdateDamageRelationRequest) =>
+		apiClient.updateDamageRelation(data),
+	getPokemons: (params?: GetPokemonsParams) => apiClient.getPokemons(params),
+	searchPokemons: (params: SearchPokemonsParams) => apiClient.searchPokemons(params),
+	getPokemonById: (id: number) => apiClient.getPokemonById(id),
+	getMovesByPokemonId: (pokemonId: number, options?: { populate?: 'type' }) =>
+		apiClient.getMovesByPokemonId(pokemonId, options),
+	updatePokemon: (id: number, data: UpdatePokemonRequest) =>
+		apiClient.updatePokemon(id, data)
+};
+
+export const movesApi = {
+	getMoves: (params?: GetMovesParams) => apiClient.getMoves(params),
+	getMoveById: (id: number) => apiClient.getMoveById(id),
+	updateMove: (id: number, data: UpdateMoveRequest) => apiClient.updateMove(id, data)
+};
+
 export const docsApi = {
 	getRoot: () => apiClient.getDocsRoot(),
 	getByPath: (path: string) => apiClient.getDocsByPath(path),
@@ -875,6 +1283,7 @@ export type {
 	NotificationType,
 	CreateNotificationRequest,
 	CreateNotificationResponse,
+	DeleteAllNotificationsResponse,
 	LoginRequest,
 	RegisterRequest,
 	ForgotPasswordRequest,
@@ -887,6 +1296,7 @@ export type {
 	DeleteUserResponse,
 	AuditLog,
 	AuditLogsResponse,
+	AuditFilterParams,
 	GetAuditLogsParams,
 	ApiResponse,
 	ApiError,
@@ -922,6 +1332,28 @@ export type {
 	SentFriendRequestsResponse,
 	GetSentFriendRequestsParams,
 	RemoveFriendResponse,
+	DamageMultiplier,
+	TypeReference,
+	DamageRelations,
+	PokemonType,
+	UpdateDamageRelationRequest,
+	UpdateDamageRelationResponse,
+	PokemonTypeSlot,
+	PokemonStat,
+	Pokemon,
+	PokemonsResponse,
+	GetPokemonsParams,
+	SearchPokemonsParams,
+	UpdatePokemonTypeSlotRequest,
+	UpdatePokemonStatRequest,
+	UpdatePokemonRequest,
+	IdNameRef,
+	MoveMeta,
+	FlavorTextEntries,
+	Move,
+	MovesResponse,
+	GetMovesParams,
+	UpdateMoveRequest,
 	DocChild,
 	DocDirectoryResponse,
 	DocFileResponse,

@@ -9,5 +9,6 @@ export interface NotificationEventPayload {
 	id: string;
 	message: string;
 	type: NotificationEventType;
+	action?: string;
 	createdAt: string;
 }
